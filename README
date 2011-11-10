@@ -1,0 +1,16 @@
+An example app displaying the usage of the sorcery gem:
+https://github.com/NoamB/sorcery
+
+Files of interest:
+
+app/controllers/*
+
+app/mailers/user_mailer.rb
+
+app/models/user.rb
+
+app/views/*
+
+config/initializers/sorcery.rb
+
+db/migrate/*
