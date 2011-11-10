@@ -48,6 +48,12 @@ class UserSessionsController < ApplicationController
     redirect_to root_url, :notice => "You have been logged out."
   end
 
+  def tgtValidate
+    ticket = params[:tgt]
+    tgt = TicketGrantingTicket.where(:ticket => ticket).first
+    render :json => tgt.present? ? {:result => true} : {:result => false}
+  end
+
   # /serviceValidate checks the validity of a service ticket and returns an XML-fragment response.
   def serviceValidate
     service_name = params[:service]
