@@ -6,3 +6,5 @@ tmp/**/*
 rvm*
 vendor
 .idea
+public/images/.DS_Store
+public/javascripts/.DS_Store
