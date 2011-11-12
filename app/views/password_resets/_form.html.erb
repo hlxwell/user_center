@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="field">
-  	<%= f.label :email %><br />
+    <%= f.label :email %><br />
     <%= @user.email %>
   </div>
   <div class="field">
@@ -22,7 +22,7 @@
   <div class="field">
     <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
-	<%= hidden_field_tag :token, @token %>
+  <%= hidden_field_tag :token, @token %>
   </div>
   <div class="actions">
     <%= f.submit %>
