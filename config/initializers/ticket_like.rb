@@ -22,6 +22,15 @@ module TicketLike
   end
 
   module InstanceMethods
+    def unused?
+      if t = self.class.unconsumed.where(:ticket => self.ticket).first
+        t.consume!
+        true
+      else
+        false
+      end
+    end
+
     def set_ticket
       self.ticket = "#{self.class.ticket_prefix}-#{rand(100000000000000000)}".to_s
     end
