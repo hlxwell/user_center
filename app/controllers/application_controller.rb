@@ -40,18 +40,19 @@ class ApplicationController < ActionController::Base
 
   # issue a Service Ticket and redirect back
   def issue_service_ticket
-    if tgt = has_valid_tgt and cookies[:service] and cookies[:service_back_url]
+    if tgt = has_valid_tgt and cookies[:service].present? and cookies[:service_back_url].present?
       # TODO need to verify params[:service] included in "available services"
       st = ServiceTicket.create(
         :service => cookies[:service],
         :username => current_user.id,
         :granted_by_tgt_id => tgt.id
       )
-      back_url = cookies[:service_back_url]
+
+      service_back_url = cookies[:service_back_url]
       cookies.delete :service
       cookies.delete :service_back_url
 
-      redirect_to back_url
+      redirect_to service_back_url + "?ticket=#{st.ticket}"
       return
     end
   end

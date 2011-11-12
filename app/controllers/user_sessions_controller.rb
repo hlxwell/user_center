@@ -17,7 +17,7 @@ class UserSessionsController < ApplicationController
       tgt = TicketGrantingTicket.create
       cookies[:tgt] = tgt.to_s
 
-      if cookies[:service] and cookies[:service_back_url]
+      if cookies[:service].present? and cookies[:service_back_url].present?
         issue_service_ticket
         return
       else
@@ -77,7 +77,7 @@ class UserSessionsController < ApplicationController
 
     if ServiceTicket.correct_service?(service)
       cookies[:service] = service
-      cookies[:service_back_url] = params[:service]
+      cookies[:service_back_url] = CGI.unescape(params[:service])
     end
   end
 
