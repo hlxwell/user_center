@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,36 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110421202911) do
+ActiveRecord::Schema.define(:version => 20111110131756) do
+
+  create_table "login_tickets", :force => true do |t|
+    t.string   "ticket"
+    t.string   "client_hostname"
+    t.datetime "consumed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "service_tickets", :force => true do |t|
+    t.string   "ticket"
+    t.string   "service"
+    t.string   "client_hostname"
+    t.string   "username"
+    t.integer  "granted_by_tgt_id"
+    t.datetime "consumed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ticket_granting_tickets", :force => true do |t|
+    t.string   "ticket"
+    t.string   "client_hostname"
+    t.string   "username"
+    t.text     "extra_attributes"
+    t.datetime "consumed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "user_providers", :force => true do |t|
     t.integer  "user_id",    :null => false
