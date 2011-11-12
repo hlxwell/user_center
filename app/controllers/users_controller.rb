@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_filter :require_login_from_http_basic, :only => [:login_from_http_basic]
-  skip_before_filter :require_login, :only => [:index, :new, :create, :activate, :login_from_http_basic]
+  skip_before_filter :require_login, :only => [:new, :create, :activate]
+
   # GET /users
   # GET /users.xml
   def index
@@ -46,11 +47,17 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to(:users, :notice => 'Registration successfull. Check your email for activation instructions.') }
-        format.xml { render :xml => @user, :status => :created, :location => @user }
+        format.html {
+          auto_login @user
+
+          if cookies[:service]
+            issue_service_ticket
+          else
+            redirect_to root_url, :notice => 'Registration successfull. Check your email for activation instructions.'
+          end
+        }
       else
         format.html { render :action => "new" }
-        format.xml { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -71,18 +78,18 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.xml
-  def destroy
-    @user = User.find(params[:id])
-    @user.destroy
+  # # DELETE /users/1
+  # # DELETE /users/1.xml
+  # def destroy
+  #   @user = User.find(params[:id])
+  #   @user.destroy
+  #
+  #   respond_to do |format|
+  #     format.html { redirect_to(users_url) }
+  #     format.xml  { head :ok }
+  #   end
+  # end
 
-    respond_to do |format|
-      format.html { redirect_to(users_url) }
-      format.xml  { head :ok }
-    end
-  end
-  
   def activate
     if @user = User.load_from_activation_token(params[:id])
       @user.activate!
@@ -91,7 +98,7 @@ class UsersController < ApplicationController
       not_authenticated
     end
   end
-  
+
   # The before filter requires authentication using HTTP Basic,
   # And this action redirects and sets a success notice.
   def login_from_http_basic
