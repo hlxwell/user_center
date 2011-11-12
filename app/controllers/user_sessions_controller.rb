@@ -3,18 +3,21 @@ class UserSessionsController < ApplicationController
 
   def new
     @user = User.new
-    @lt = LoginTicket.create
-    @service = params[:service] if ServiceTicket.correct_service?(params[:service])
+    @lt = LoginTicket.create!(:client_hostname => request.remote_ip)
+    store_service_url
   end
 
+  # TODO: use cookies.signed[:name] to store cookie
   def create
     if !LoginTicket.validate_ticket(params[:lt])
+      @lt = LoginTicket.create!(:client_hostname => request.remote_ip)
       flash.now[:alert] = "Invalid login ticket."
     elsif user = login(params[:email], params[:password], params[:remember])
+      # create and store TGT
       tgt = TicketGrantingTicket.create
       cookies[:tgt] = tgt.to_s
 
-      if params[:service]
+      if cookies[:service] and cookies[:service_back_url]
         issue_service_ticket
         return
       else
@@ -22,41 +25,39 @@ class UserSessionsController < ApplicationController
         return
       end
     else
-      @lt = LoginTicket.create
+      @lt = LoginTicket.create!(:client_hostname => request.remote_ip)
       flash.now[:alert] = "Invalid login or password."
     end
 
-    respond_to do |format|
-      format.json {
-        render :json => {:name => "michael he"}.to_json, :callback => params[:callback]
-      }
-      format.html { render :action => 'new' }
-    end
+    render :action => 'new'
   end
 
-  # if has a validated TGT in cookie:
-  # 1. remove it from cookie
-  # 2. remove it from redis
-  # 3. logout warden.
-  #
   def destroy
+    # remove tgt
     if tgt = has_valid_tgt
       tgt.destroy
       cookies.delete(:tgt)
     end
+
+    # logout session
     logout
-    redirect_to root_url, :notice => "You have been logged out."
+
+    if params[:destination]
+      redirect_to params[:destination]
+    else
+      redirect_to root_url, :notice => "You have been logged out."
+    end
   end
 
-  def tgtValidate
-    ticket = params[:tgt]
-    tgt = TicketGrantingTicket.where(:ticket => ticket).first
-    render :json => tgt.present? ? {:result => true} : {:result => false}
-  end
+  # def tgtValidate
+  #   ticket = params[:tgt]
+  #   tgt = TicketGrantingTicket.where(:ticket => ticket).first
+  #   render :json => tgt.present? ? {:result => true} : {:result => false}
+  # end
 
   # /serviceValidate checks the validity of a service ticket and returns an XML-fragment response.
   def serviceValidate
-    service_name = params[:service]
+    service_name = get_url_host(params[:service])
     ticket = params[:ticket]
 
     # check the existance of service_url and ticket
@@ -69,22 +70,14 @@ class UserSessionsController < ApplicationController
     render_validation_success service_ticket.username
   end
 
-private
+  private
 
-  def has_valid_tgt
-    TicketGrantingTicket.where(:ticket => cookies[:tgt]).unconsumed.first
-  end
+  def store_service_url
+    service = get_url_host params[:service]
 
-  def issue_service_ticket
-    if tgt = has_valid_tgt and params[:service]
-      # TODO need to verify params[:service] included in "available services"
-      st = ServiceTicket.create(
-        :service => params[:service],
-        :username => current_user.id,
-        :granted_by_tgt_id => tgt.id
-      )
-      redirect_to st.service_callback_url
-      return
+    if ServiceTicket.correct_service?(service)
+      cookies[:service] = service
+      cookies[:service_back_url] = params[:service]
     end
   end
 
