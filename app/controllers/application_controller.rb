@@ -39,13 +39,12 @@ class ApplicationController < ActionController::Base
   protected
 
   def has_valid_tgt
-    TicketGrantingTicket.where(:ticket => cookies[:tgt]).unconsumed.first
+    TicketGrantingTicket.where(:ticket => cookies[:tgt]).first # unconsumed is meaningless, since it will be deleted after logout
   end
 
   # issue a Service Ticket and redirect back
   def issue_service_ticket
     if tgt = has_valid_tgt and has_service_info?
-      # TODO need to verify params[:service] included in "available services"
       st = ServiceTicket.create(
         :service => cookies[:service],
         :username => current_user.id,

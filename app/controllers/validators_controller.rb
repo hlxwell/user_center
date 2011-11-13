@@ -9,7 +9,7 @@ class ValidatorsController < ApplicationController
     render_validation_error(:invalid_request) and return if @service.blank? or @ticket.blank?
 
     # find the ST from DB
-    render_validation_error(:invalid_ticket, "ticket #{ticket} not recognized") and return unless @st
+    render_validation_error(:invalid_ticket, "ticket #{@ticket} not recognized") and return unless @st
 
     # validate if current ST is for current service.
     render_validation_error(:invalid_service) and return unless @st.valid_for_service?(@service)
