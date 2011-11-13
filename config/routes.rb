@@ -1,4 +1,7 @@
 UserCenter::Application.routes.draw do
+  get "/get_login_ticket.json" => "sso_api#get_login_ticket"
+  get "/get_service_ticket.json" => "sso_api#get_service_ticket"
+
   root :to => 'user_sessions#new'
 
   resources :users, :admins do
