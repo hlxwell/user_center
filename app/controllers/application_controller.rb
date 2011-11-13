@@ -55,8 +55,7 @@ class ApplicationController < ActionController::Base
       cookies.delete :service
       cookies.delete :service_back_url
 
-      redirect_to service_back_url + "?ticket=#{st.ticket}"
-      return
+      return service_back_url + "?ticket=#{st.ticket}"
     end
   end
 

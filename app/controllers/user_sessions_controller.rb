@@ -7,7 +7,8 @@ class UserSessionsController < ApplicationController
     store_service_url
 
     if logged_in? and has_service_info?
-      issue_service_ticket and return
+      redirect_to issue_service_ticket
+      return
     end
   end
 
@@ -21,11 +22,24 @@ class UserSessionsController < ApplicationController
       tgt = TicketGrantingTicket.create
       cookies[:tgt] = tgt.to_s
 
+      # issue service ticket
+      @sts = ServiceTicket::SERVICES.map do |service|
+        ServiceTicket.create(
+          :service => service,
+          :username => current_user.id,
+          :granted_by_tgt_id => tgt.id
+        )
+      end
+
       if has_service_info?
-        issue_service_ticket
+        @back_url = issue_service_ticket
+        render :layout => false
         return
       else
-        redirect_back_or_to(:users, :notice => 'Login successfull.')
+        flash[:notice] = 'Login successfull.'
+        @back_url = session[:return_to_url] || root_url
+        session[:return_to_url] = nil
+        render :layout => false
         return
       end
     else
@@ -45,19 +59,14 @@ class UserSessionsController < ApplicationController
 
     # logout session
     logout
-
-    if params[:destination]
-      redirect_to params[:destination]
-    else
-      redirect_to root_url, :notice => "You have been logged out."
-    end
+    @back_url = if params[:destination]
+                  params[:destination]
+                else
+                  flash[:notice] = "You have been logged out."
+                  root_url
+                end
+    render :layout => false
   end
-
-  # def tgtValidate
-  #   ticket = params[:tgt]
-  #   tgt = TicketGrantingTicket.where(:ticket => ticket).first
-  #   render :json => tgt.present? ? {:result => true} : {:result => false}
-  # end
 
   # /serviceValidate checks the validity of a service ticket and returns an XML-fragment response.
   def serviceValidate
