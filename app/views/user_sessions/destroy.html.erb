@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>User Center</title>
+    <style type="text/css">
+      body {font-family: arial,sans-serif;}
+      .body {margin: 0 15px; }
+      div.errorbox-good {}
+      div.errorbox-bad {}
+      div.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+      font.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+    </style>
+  </head>
+  <body onload="doRedirect()">
+  <p><font face="Arial, sans-serif">Logging Out, Please wait...</font></p>
+  <noscript><meta http-equiv="refresh" content="5; url=&#39;<%= @back_url %>&#39;"></noscript>
+  <script type="text/javascript">
+    function doRedirect() {
+      location.replace("<%= @back_url %>");
+    }
+  </script>
+
+  <% ServiceTicket::SERVICES.each do |service| %>
+    <%= image_tag "http://#{service}:4000/logout", :size => "0x0" %>
+  <% end %>
+  </body>
+</html>
