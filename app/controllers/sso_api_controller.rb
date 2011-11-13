@@ -16,7 +16,7 @@ class SsoApiController < ApplicationController
     respond_to do |format|
       format.json {
         if !LoginTicket.validate_ticket(params[:lt])
-          render :json => { :st => nil, :message => "Wrong login ticket" }, :callback => params[:callback]
+          render :json => { :sts => nil, :message => "Wrong login ticket" }, :callback => params[:callback]
         elsif user = login(params[:email], params[:password], params[:remember])
           tgt = has_valid_tgt || TicketGrantingTicket.create
           cookies[:tgt] = tgt.to_s if cookies[:tgt].blank?
@@ -30,7 +30,7 @@ class SsoApiController < ApplicationController
             )
           end
 
-          render :json => { :sts => sts.map {|st| "http://#{st.service}:4000/privacy?ticket#{st.ticket}"}, :message => "success" }, :callback => params[:callback]
+          render :json => { :sts => sts.map {|st| CGI.escape "http://#{st.service}:4000/privacy?ticket#{st.ticket}"}, :message => "success" }, :callback => params[:callback]
         end
       }
     end
