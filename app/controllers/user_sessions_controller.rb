@@ -5,6 +5,10 @@ class UserSessionsController < ApplicationController
     @user = User.new
     @lt = LoginTicket.create!(:client_hostname => request.remote_ip)
     store_service_url
+
+    if logged_in? and has_service_info?
+      issue_service_ticket and return
+    end
   end
 
   # TODO: use cookies.signed[:name] to store cookie
@@ -17,7 +21,7 @@ class UserSessionsController < ApplicationController
       tgt = TicketGrantingTicket.create
       cookies[:tgt] = tgt.to_s
 
-      if cookies[:service].present? and cookies[:service_back_url].present?
+      if has_service_info?
         issue_service_ticket
         return
       else

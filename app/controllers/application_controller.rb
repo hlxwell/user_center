@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base
     URI::parse(CGI.unescape(url.to_s)).host
   end
 
+  def has_service_info?
+    cookies[:service].present? and cookies[:service_back_url].present?
+  end
+
   protected
 
   def has_valid_tgt
@@ -40,7 +44,7 @@ class ApplicationController < ActionController::Base
 
   # issue a Service Ticket and redirect back
   def issue_service_ticket
-    if tgt = has_valid_tgt and cookies[:service].present? and cookies[:service_back_url].present?
+    if tgt = has_valid_tgt and has_service_info?
       # TODO need to verify params[:service] included in "available services"
       st = ServiceTicket.create(
         :service => cookies[:service],
