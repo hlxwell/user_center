@@ -1,9 +1,6 @@
 class ValidatorsController < ApplicationController
   before_filter :set_variables
 
-  # def proxyValidate
-  # end
-
   def serviceValidate
     # check the existance of service_url and ticket
     render_validation_error(:invalid_request) and return if @service.blank? or @ticket.blank?
