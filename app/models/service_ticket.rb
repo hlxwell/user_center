@@ -3,6 +3,8 @@ class ServiceTicket < ActiveRecord::Base
   include TicketLike
 
   SERVICES = [
+    "en.local.theplant-dev.com",
+    "127.0.0.1",
     "en.lvh.me",
     "us.lvh.me",
     "nl.lvh.me",

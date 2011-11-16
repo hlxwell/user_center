@@ -10,8 +10,8 @@
   </head>
   <body onload="doRedirect()">
   <p>Logging In, Please wait...</p>
-  <% @sts.each do |st| %>
-    <%= image_tag "http://#{st.service}:4000/logout", :size => "0x0" %>
+  <% ServiceTicket::SERVICES.each do |service| %>
+    <%= image_tag "http://#{service}:4000/logout", :size => "0x0" %>
   <% end %>
   </body>
 </html>
