@@ -36,9 +36,9 @@ namespace :deploy do
 
   task :init_project do
     run "cd #{release_path}; ln -s #{shared_path}/database.yml #{release_path}/config/database.yml"
-    # run "cd #{release_path}; /home/app/.rvm/gems/ruby-1.9.3-rc1/bin/bundle install"
-    # run "cd #{release_path}; /home/app/.rvm/gems/ruby-1.9.3-rc1/bin/bundle exec rake db:migrate RAILS_ENV=production"
-    # run "cd #{release_path}; /home/app/.rvm/gems/ruby-1.9.3-rc1/bin/bundle exec rake assets:precompile RAILS_ENV=production"
+    # run "cd #{release_path}; bundle install"
+    # run "cd #{release_path}; bundle exec rake db:migrate RAILS_ENV=production"
+    # run "cd #{release_path}; bundle exec rake assets:precompile RAILS_ENV=production"
   end
 end
 after "deploy:symlink", "deploy:init_project"
