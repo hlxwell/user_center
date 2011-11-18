@@ -3,9 +3,9 @@ class ServiceTicket < ActiveRecord::Base
   include TicketLike
 
   SERVICES = [
-    "a.client.sso.theplant-dev.com",
-    "b.client.sso.theplant-dev.com",
-    "c.client.sso.theplant-dev.com"
+    "asics.client.sso.theplant-dev.com",
+    "myasics.client.sso.theplant-dev.com",
+    "sso.isafeplayer.com"
   ]
 
   belongs_to :granted_by_tgt,
