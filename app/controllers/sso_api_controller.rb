@@ -10,8 +10,10 @@ class SsoApiController < ApplicationController
       format.json {
         if ServiceTicket.correct_service? get_service_from_referrer
           @lt = LoginTicket.create!(:client_hostname => request.remote_ip)
+          render :json => { :lt => @lt.try(:ticket) }, :callback => params[:callback]
+        else
+          render :json => { :lt => nil }, :callback => params[:callback], :status => 422
         end
-        render :json => { :lt => @lt.try(:ticket) || "incorrect-service" }, :callback => params[:callback]
       }
     end
   end
