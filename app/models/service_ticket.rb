@@ -2,11 +2,18 @@ class ServiceTicket < ActiveRecord::Base
   include Consumable
   include TicketLike
 
-  SERVICES = [
-    "asics.client.sso.theplant-dev.com",
-    "myasics.client.sso.theplant-dev.com",
-    "sso.isafeplayer.com"
-  ]
+  SERVICES =  if Rails.env.production?
+                [
+                  "asics.client.sso.theplant-dev.com",
+                  "myasics.client.sso.theplant-dev.com",
+                  "sso.isafeplayer.com"
+                ]
+              else
+                [
+                  "en.local.theplant-dev.com:4000",
+                  "zh.local.theplant-dev.com:4000"
+                ]
+              end
 
   belongs_to :granted_by_tgt,
              :class_name => 'TicketGrantingTicket',
