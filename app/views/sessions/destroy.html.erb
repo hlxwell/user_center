@@ -1,0 +1,5 @@
+<p>Logging Out, Please wait...</p>
+<% ServiceTicket::SERVICES.each do |service| %>
+  <!-- port should be removed in production -->
+  <%= image_tag "http://#{service}/logout", :size => "0x0" %>
+<% end %>

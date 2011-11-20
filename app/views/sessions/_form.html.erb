@@ -1,0 +1,18 @@
+<%= form_tag sessions_path, :method => :post do %>
+  <div class="field">
+    <%= label_tag :email %><br />
+    <%= text_field_tag :email %>
+  </div>
+  <div class="field">
+    <%= label_tag :password %><br />
+    <%= password_field_tag :password %>
+  </div>
+  <div class="field">
+    <%= check_box_tag :remember %>
+    <%= label_tag :remember, "keep me logged in" %>
+  </div>
+  <div class="actions">
+    <%= hidden_field_tag :lt, @lt.ticket %>
+    <%= submit_tag "Login" %>
+  </div>
+<% end %>

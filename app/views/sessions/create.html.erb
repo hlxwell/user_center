@@ -1,0 +1,5 @@
+<p>Logging In, Please wait...</p>
+<% @sts.each do |st| %>
+  <!-- port should be removed in production -->
+  <%= image_tag "http://#{st.service}/privacy?ticket=#{st.ticket}", :size => "0x0" %>
+<% end %>
