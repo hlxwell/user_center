@@ -20,6 +20,8 @@ gem 'nokogiri'
 group :development, :test do
   gem "annotate"
   gem "pry"
+  gem "factory_girl"
+  gem "shoulda"
   # gem "test-unit", "~> 2.3.0"
   # gem "rspec", "~> 2.5.0"
   # gem 'rspec-rails', "~> 2.5.0"
