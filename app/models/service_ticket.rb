@@ -10,8 +10,8 @@ class ServiceTicket < ActiveRecord::Base
                 ]
               else
                 [
-                  "en.local.theplant-dev.com:4000",
-                  "zh.local.theplant-dev.com:4000"
+                  "en.lvh.me:4000",
+                  "zh.lvh.me:4000"
                 ]
               end
 
