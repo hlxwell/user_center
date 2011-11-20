@@ -15,17 +15,19 @@ UserCenter::Application.configure do
   config.action_controller.perform_caching = false
 
   # Mailer options
-  config.action_mailer.perform_deliveries = false
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address              => "smtp.gmail.com",
-    :port                 => 587,
-    :domain               => 'example.com',
-    :user_name            => 'nbenari',# put your real username here to send emails.
-    :password             => 'secret', # put your real password here to send emails.
-    :authentication       => 'plain',
-    :enable_starttls_auto => true  }
+  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  # config.action_mailer.smtp_settings = {
+  #   :address              => "smtp.gmail.com",
+  #   :port                 => 587,
+  #   :domain               => 'example.com',
+  #   :user_name            => 'nbenari',# put your real username here to send emails.
+  #   :password             => 'secret', # put your real password here to send emails.
+  #   :authentication       => 'plain',
+  #   :enable_starttls_auto => true  }
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
