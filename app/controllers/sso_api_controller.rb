@@ -1,3 +1,7 @@
+###
+# SSO API is used to provide LoginTicket and ServiceTicket to SSO client by JSONP.
+# That other services can login through their website, without being redirected to UserCenter
+#
 class SsoApiController < ApplicationController
   respond_to :json
 
@@ -18,8 +22,8 @@ class SsoApiController < ApplicationController
         if !LoginTicket.validate_ticket(params[:lt])
           render :json => { :sts => nil, :message => "Wrong login ticket" }, :callback => params[:callback]
         elsif user = login(params[:email], params[:password], params[:remember])
-          tgt = has_valid_tgt || TicketGrantingTicket.create
-          cookies[:tgt] = tgt.to_s if cookies[:tgt].blank?
+          tgt = current_tgt || TicketGrantingTicket.create
+          cookies.signed[:tgt] = tgt.to_s if cookies.signed[:tgt].blank?
 
           # issue service ticket
           sts = ServiceTicket::SERVICES.map do |service|
