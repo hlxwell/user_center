@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <title>User Center</title>
+    <noscript><meta http-equiv="refresh" content="5; url=&#39;<%= @back_url %>&#39;"></noscript>
+    <script type="text/javascript">
+      function doRedirect() {
+        location.replace("<%= @back_url %>");
+      }
+    </script>
+  </head>
+  <body onload="doRedirect()">
+    <%= yield %>
+  </body>
+</html>
