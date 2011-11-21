@@ -29,7 +29,8 @@ class ValidatorsController < ApplicationController
     xml = Nokogiri::XML::Builder.new do |xml|
       xml.serviceResponse("xmlns:cas" => "http://www.yale.edu/tp/cas") {
         xml.parent.namespace = xml.parent.namespace_definitions.first
-        xml['cas'].authenticationFailure(message, :code => code.to_s.upcase){
+        xml['cas'].authenticationFailure(message, :code => code.to_s.upcase) {
+          xml.text message || " "
         }
       }
     end
