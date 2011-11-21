@@ -14,6 +14,12 @@ UserCenter::Application.configure do
   # config.action_view.debug_rjs             = true
   config.action_controller.perform_caching = false
 
+  # Do not compress assets
+  config.assets.compress = false
+
+  # Expands the lines which load the assets
+  config.assets.debug = true
+
   # Mailer options
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true

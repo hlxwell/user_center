@@ -1,0 +1,45 @@
+$blue: #00256f
+$grey: #7b8088
+$pale: #e6e9eb
+$violet: #e4eaf3
+
+$min: 4px
+$mid: 8px
+$max: 12px
+
+$min-bottom: 0 0 4px 4px
+
+@mixin gradient($first, $second)
+  background-color: $first
+  background-image: -webkit-gradient(linear, top center, bottom center, from($first),to($second))
+  background-image: -webkit-linear-gradient(top, $first, $second)
+  background-image: -moz-linear-gradient(top, $first, $second)
+  background-image: -o-linear-gradient(top, $first, $second)
+  background-image: -ms-linear-gradient(top, $first, $second)
+  background-image: linear-gradient(top, $first, $second)
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='$first', EndColorStr='$second')
+  
+@mixin box-shadow($shadow-1, $shadow-2: false, $shadow-3: false, $shadow-4: false, $shadow-5: false, $shadow-6: false, $shadow-7: false, $shadow-8: false, $shadow-9: false)
+  $full: $shadow-1
+  $shadows: $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9
+  @each $shadow in $shadows
+    @if $shadow
+      $full: $full, $shadow
+  -webkit-box-shadow: $full
+  -moz-box-shadow: $full
+  -o-box-shadow: $full
+  box-shadow: $full
+    
+  // -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=90, Color='$color')"
+  // filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=90, Color='$color')
+  
+.vr
+  border: 0
+  border-left: 1px solid #000
+  border-right: 1px solid #fff
+  border-left: 1px solid rgba(0,0,0,0.1)
+  border-right: 1px solid rgba(255,255,255,0.3)
+  filter: alpha(opacity = 30)
+  width: 0
+  margin: auto 0
+  // clear: both
