@@ -26,7 +26,6 @@ class SsoApiController < ApplicationController
         elsif user = login(params[:email], params[:password], params[:remember])
           tgt = current_tgt || TicketGrantingTicket.create
           cookies.signed[:tgt] = tgt.to_s if cookies.signed[:tgt].blank?
-
           # issue service ticket
           sts = ServiceTicket::SERVICES.map do |service|
             ServiceTicket.create(
@@ -35,8 +34,9 @@ class SsoApiController < ApplicationController
               :granted_by_tgt_id => tgt.id
             )
           end
-
-          render :json => { :sts => sts.map {|st| CGI.escape "http://#{st.service}:4000/privacy?ticket#{st.ticket}"}, :message => "success" }, :callback => params[:callback]
+          render :json => { :sts => sts.map {|st| CGI.escape "http://#{st.service}/privacy?ticket#{st.ticket}"}, :message => "success" }, :callback => params[:callback]
+        else
+          render :json => { :sts => nil, :message => "Wrong email or password" }, :callback => params[:callback]
         end
       }
     end
