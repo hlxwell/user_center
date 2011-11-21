@@ -3,8 +3,9 @@ class ApplicationController < ActionController::Base
 
   def get_url_host url
     url = URI::parse(CGI.unescape(url.to_s))
-    "#{url.host}:#{url.port}"
+    url.port.to_s == "80" ? url.host : "#{url.host}:#{url.port}"
   end
+  helper_method :get_url_host
 
   def has_service_info?
     cookies[:service].present? and cookies[:service_back_url].present?
