@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
       @sts = ServiceTicket::SERVICES.map do |service|
         ServiceTicket.create(
           :service => service,
-          :username => current_user.id,
+          :username => current_user.email,
           :granted_by_tgt_id => tgt.id
         )
       end

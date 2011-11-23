@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     if tgt = current_tgt and has_service_info?
       st = ServiceTicket.create(
         :service => cookies[:service],
-        :username => current_user.id,
+        :username => current_user.email,
         :granted_by_tgt_id => tgt.id
       )
 
