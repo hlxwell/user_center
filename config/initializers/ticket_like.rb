@@ -19,6 +19,21 @@ module TicketLike
         false
       end
     end
+
+    # max_lifetime
+    # max_unconsumed_lifetime
+    #
+    def cleanup(max_lifetime, max_unconsumed_lifetime)
+      transaction do
+        conditions = ["created_at < ? OR (consumed IS NULL AND created_at < ?)",
+                        Time.now - max_lifetime,
+                        Time.now - max_unconsumed_lifetime]
+
+        expired_tickets_count = count(:conditions => conditions)
+        # logger.info("Destroying #{expired_tickets_count} expired #{self.name.demodulize} #{'s' if expired_tickets_count > 1}.") if expired_tickets_count > 0
+        destroy_all(conditions)
+      end
+    end
   end
 
   module InstanceMethods
