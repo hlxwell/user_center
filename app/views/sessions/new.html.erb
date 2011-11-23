@@ -2,5 +2,7 @@
 <article class="form_login">
   <% unless current_user %>
     <%= render 'form' %>
+  <% else %>
+    <h2>You've logged in.</h2>
   <% end %>
 </article>
